@@ -11,7 +11,7 @@ import com.cy.pj.sys.entity.SysLog;
 
 @SpringBootTest
 public class SysLogDaoTests {
-
+	//我加了一行注释
 	  //@Resource
 	  @Autowired
 	  private SysLogDao sysLogDao;

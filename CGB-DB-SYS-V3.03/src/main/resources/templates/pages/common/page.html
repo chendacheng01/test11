@@ -1,0 +1,67 @@
+<ul class="pagination pagination-sm no-margin pull-right">
+    <li><a class="first">首页</a></li>
+	<li><a class="pre">上一页</a></li>
+	<li><a class="next">下一页</a></li>
+	<li><a class="last">尾页</a></li>
+	<li><a class="rowCount">总记录数(0)</a></li>
+	<li><a class="pageCount">总页数(0)</a></li>
+	<li><a class="pageCurrent">当前页(1)</a></li>
+</ul>
+
+<script type="text/javascript">
+//页面加载完成以后为页面中元素注册点击事件
+$(function(){
+	$(".pagination").on("click",".first,.pre,.next,.last",doJumpToPage);
+})
+//通过此函数初始化页面分页信息
+function doSetPagination(page){//page为服务端返回的pageObject对象信息
+	$(".rowCount").html("总记录数("+page.rowCount+")");
+	$(".pageCount").html("总页数("+page.pageCount+")");
+	$(".pageCurrent").html("当前页("+page.pageCurrent+")");
+	//存储当前页码值和总页数，其它方法需要时，可以从指定地方获取。
+	//data函数为jquery中的一个数据绑定函数
+	//语法为data(key[,value])
+	$("#pageId").data("pageCurrent",page.pageCurrent);
+	$("#pageId").data("pageCount",page.pageCount);
+}
+
+//定义分页点击事件的处理函数
+function doJumpToPage(){
+	//debugger
+	//1.获取被点击的对象的class属性的值
+	//prop(属性名[,属性值])为jquery中的一个操作属性对象的一个函数
+	//当prop函数中有属性值，表示为属性赋值。没有属性值只有属性表示获取属性值。
+	var cls=$(this).prop("class");
+	//2.基于被点击对象修改当前页码值
+	//2.1获取当前页码值以及总页数
+	var pageCurrent=$("#pageId").data("pageCurrent");
+	var pageCount=$("#pageId").data("pageCount")
+	//2.2修改当前页码值
+	if(cls=="first"){
+		pageCurrent=1;
+	}else if(cls=="pre"&&pageCurrent>1){
+		pageCurrent--;
+	}else if(cls=="next"&&pageCurrent<pageCount){
+		pageCurrent++;
+	}else if(cls=="last"){
+		pageCurrent=pageCount;
+	}else if(pageCurrent==1){
+		alert("已经是第一页了");
+		return;
+	}else if(pageCurrent==pageCount){
+		alert("已经是最后一页了");
+		return;
+	}else{return;}
+	//3.存储修改后的pageCurrent的值
+	$("#pageId").data("pageCurrent",pageCurrent);
+	//4.基于新的页码值重新执行查询
+	doGetObjects();
+}
+
+</script>
+
+
+
+
+
+
